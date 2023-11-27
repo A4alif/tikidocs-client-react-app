@@ -6,4 +6,9 @@
 body {
     font-family: 'Montserrat', sans-serif;
 }
-
+.single-text-gradient {
+    background: linear-gradient(180deg, #6499e9 0%, #8758f1 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
