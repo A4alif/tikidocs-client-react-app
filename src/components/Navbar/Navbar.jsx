@@ -1,8 +1,16 @@
-import React from "react";
-import avatar from "../../assets/images/avatar-image.png";
+import React, { useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
 import logo from "../../assets/tikidocsLogo.png";
+import { AuthContext } from "../../Provider/AuthProvider";
 const Navbar = () => {
+  const { user, logOut } = useContext(AuthContext);
+  const handleLogOut = () => {
+    logOut()
+      .then(() => {
+        toast("Logged Out");
+      })
+      .catch((error) => console.log(error));
+  };
   return (
     <>
       <div className="container mx-auto px-6">
@@ -100,37 +108,50 @@ const Navbar = () => {
             </ul>
           </div>
           <div className="navbar-end">
-            <div className="dropdown dropdown-end">
-              <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-                <div className="w-10 rounded-full">
-                  <img src="https://i.postimg.cc/445YCvkp/a4alif.jpg" alt="" />
+            {user?.email ? (
+              <>
+                <div className="dropdown dropdown-end">
+                  <label
+                    tabIndex={0}
+                    className="btn btn-ghost btn-circle avatar"
+                  >
+                    <div className="w-10 rounded-full">
+                      {user?.photoURL && <img src={user?.photoURL} alt="" />}
+                    </div>
+                  </label>
+                  <ul
+                    tabIndex={0}
+                    className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 "
+                  >
+                    <li className="py-3">
+                      <a className="justify-between">{user?.displayName}</a>
+                    </li>
+                    <li>
+                      <Link to={""}>Dashboard</Link>
+                    </li>
+                    <li className="pb-3 text-red-500 font-bold">
+                      <Link to={""} onClick={handleLogOut}>
+                        Logout
+                      </Link>
+                    </li>
+                  </ul>
                 </div>
-              </label>
-              <ul
-                tabIndex={0}
-                className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 "
-              >
-                <li className="py-3">
-                  <a className="justify-between">Alif Hasan Shah</a>
-                </li>
-                <li>
-                  <Link to={""}>Dashboard</Link>
-                </li>
-                <li className="pb-3 text-red-500 font-bold">
-                  <Link to={""}>Logout</Link>
-                </li>
-              </ul>
-            </div>
-            <div className="ml-6">
-              <Link to={"/login"}>
-                <button
-                  type="button"
-                  className="text-white  bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-semibold rounded-lg text-md px-5 py-2.5 text-center mr-2 mb-2"
-                >
-                  Join US
-                </button>
-              </Link>
-            </div>
+              </>
+            ) : (
+              <>
+                {" "}
+                <div className="ml-6">
+                  <Link to={"/login"}>
+                    <button
+                      type="button"
+                      className="text-white  bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-semibold rounded-lg text-md px-5 py-2.5 text-center mr-2 mb-2"
+                    >
+                      Join US
+                    </button>
+                  </Link>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>

@@ -5,6 +5,7 @@ import ErrorPage from "../pages/ErrorPage/ErrorPage";
 import Membership from "../pages/Membership/Membership";
 import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
+import PrivateRoute from "./PrivateRoute";
 
 const router = createBrowserRouter([
   {
@@ -18,7 +19,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/membership",
-        element: <Membership />,
+        element: (
+          <PrivateRoute>
+            <Membership />
+          </PrivateRoute>
+        ),
       },
     ],
   },

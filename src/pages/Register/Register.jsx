@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify";
+import { AuthContext } from '../../Provider/AuthProvider';
+import { auth } from "../../firebase/firebase.config";
+import { updateProfile } from "firebase/auth";
 const Register = () => {
     const {
         register,
@@ -10,10 +13,48 @@ const Register = () => {
         formState: { errors },
       } = useForm();
       const navigate = useNavigate();
+
+      const {createUser} = useContext(AuthContext);
      
       const handleRegister = (data) => {
         const { name, photourl, email, password } = data;
-        console.log(data);
+        createUser(email, password)
+      .then((result) => {
+        toast.success('Successfully Registered', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
+        updateProfile(auth.currentUser, {
+          displayName: name,
+          photoURL: photourl,
+        })
+          .then(() => {
+            // Profile updated!
+            // ..
+          })
+          .catch((error) => {
+            toast.error("Something Went Wrong", {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+          });
+          navigate('/')
+      })
+      .catch((error) => {
+        toast(error.message);
+      });
       }
 
 
