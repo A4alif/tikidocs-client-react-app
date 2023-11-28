@@ -1,9 +1,11 @@
 import React from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { CiHome } from "react-icons/ci";
+import useIsAdmin from "../hooks/useIsAdmin";
 
 const DashboardLayout = () => {
-  const isAdmin = true;
+  const [isAdmin] = useIsAdmin();
+ 
   return (
     <div>
       <div className="container mx-auto">

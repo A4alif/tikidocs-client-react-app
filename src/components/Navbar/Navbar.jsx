@@ -3,9 +3,11 @@ import { Link, NavLink } from "react-router-dom";
 import logo from "../../assets/tikidocsLogo.png";
 import { AuthContext } from "../../Provider/AuthProvider";
 import { toast } from 'react-toastify';
+import useIsAdmin from "../../hooks/useIsAdmin";
 
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
+  const [isAdmin] = useIsAdmin();
   const handleLogOut = () => {
     logOut()
       .then(() => {
@@ -129,7 +131,8 @@ const Navbar = () => {
                       <a className="justify-between">{user?.displayName}</a>
                     </li>
                     <li>
-                      {user?.email && <Link to={"/dashboard/user-profile"}>Dashboard</Link>}
+                      {user?.email && !isAdmin && <Link to={"/dashboard/user-profile"}>Dashboard</Link>}
+                      {user?.email && isAdmin && <Link to={"/dashboard/admin-profile"}>Dashboard</Link>}
                     </li>
                     <li className="pb-3 text-red-500 font-bold">
                       <Link to={""} onClick={handleLogOut}>

@@ -16,7 +16,7 @@ const AllUsers = () => {
 
   const handleMakeAdmin = (user) => {
     const userInfoUpdate = {
-        status: "gold",
+        status: "admin",
         statusPhotoUrl: "https://i.postimg.cc/1RphNDvj/admin-crown.png",
         role: "admin"
     }
