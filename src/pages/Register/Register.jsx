@@ -5,7 +5,9 @@ import { toast } from "react-toastify";
 import { AuthContext } from '../../Provider/AuthProvider';
 import { auth } from "../../firebase/firebase.config";
 import { updateProfile } from "firebase/auth";
+import useAxiosPublic from '../../hooks/useAxiosPublic'
 const Register = () => {
+  const axiosPublic = useAxiosPublic();
     const {
         register,
         handleSubmit,
@@ -20,23 +22,39 @@ const Register = () => {
         const { name, photourl, email, password } = data;
         createUser(email, password)
       .then((result) => {
-        toast.success('Successfully Registered', {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          });
+        
         updateProfile(auth.currentUser, {
           displayName: name,
           photoURL: photourl,
         })
           .then(() => {
             // Profile updated!
-            // ..
+            // send user info to user collection into database
+            const userInfo = {
+              name:name,
+              email: email,
+              photourl: photourl,
+              status: "bronze",
+              statusPhotoUrl : "https://i.postimg.cc/25fnCTb5/bronze-badge-new.webp"
+            }
+
+            axiosPublic.post("/users", userInfo)
+            .then( (res) => {
+              if(res.data.result.insertedId){
+                toast.success('Successfully Registered', {
+                  position: "top-right",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "light",
+                  });
+                  navigate('/')
+              }
+            })
+
           })
           .catch((error) => {
             toast.error("Something Went Wrong", {
@@ -50,7 +68,7 @@ const Register = () => {
               theme: "light",
             });
           });
-          navigate('/')
+          
       })
       .catch((error) => {
         toast(error.message);

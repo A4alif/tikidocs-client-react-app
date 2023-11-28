@@ -4,11 +4,12 @@ import { FcGoogle } from "react-icons/fc";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../Provider/AuthProvider";
-
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const axiosPublic = useAxiosPublic();
   const {
     register,
     handleSubmit,
@@ -19,7 +20,17 @@ const Login = () => {
   const handleGoogle = () => {
     googleSignIn()
       .then((result) => {
-        navigate(location?.state ? location.state : "/");
+        const userInfo = {
+          email: result.user?.email,
+          name: result.user?.displayName,
+          photourl: result.user?.photoURL,
+          status: "bronze",
+          statusPhotoUrl: "https://i.postimg.cc/25fnCTb5/bronze-badge-new.webp",
+        };
+        axiosPublic.post("/users", userInfo).then((res) => {
+          console.log(res.data);
+          navigate(location?.state ? location.state : "/");
+        });
       })
       .catch((error) => {
         toast(error.message);

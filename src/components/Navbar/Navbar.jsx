@@ -2,6 +2,8 @@ import React, { useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
 import logo from "../../assets/tikidocsLogo.png";
 import { AuthContext } from "../../Provider/AuthProvider";
+import { toast } from 'react-toastify';
+
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
   const handleLogOut = () => {
