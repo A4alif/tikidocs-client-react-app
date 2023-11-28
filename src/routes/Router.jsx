@@ -10,6 +10,10 @@ import DashboardLayout from "../layout/DashboardLayout";
 import UserProfile from "../pages/Dashboard/UserProfile/UserProfile";
 import AddPost from "../pages/Dashboard/AddPost/AddPost";
 import MyPosts from "../pages/Dashboard/MyPosts/MyPosts";
+import AdminProfile from "../pages/Dashboard/AdminProfile/AdminProfile";
+import AllUsers from "../pages/Dashboard/AllUsers/AllUsers";
+import CommentsReport from "../pages/Dashboard/CommentsReport/CommentsReport";
+import AddAnnouncement from "../pages/Dashboard/AddAnnouncement/AddAnnouncement";
 
 const router = createBrowserRouter([
   {
@@ -58,6 +62,22 @@ const router = createBrowserRouter([
       },
 
       // admin dashboard routes
+      {
+        path: "admin-profile",
+        element:<AdminProfile />,
+      },
+      {
+        path: "all-users",
+        element: <AllUsers />
+      },
+      {
+        path: "add-announcement",
+        element: <AddAnnouncement />
+      },
+      {
+        path: "reported-comments",
+        element: <CommentsReport />
+      }
     ]
 
   }

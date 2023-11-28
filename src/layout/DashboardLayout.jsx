@@ -3,7 +3,7 @@ import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { CiHome } from "react-icons/ci";
 
 const DashboardLayout = () => {
-  const isAdmin = false;
+  const isAdmin = true;
   return (
     <div>
       <div className="container mx-auto">
@@ -43,6 +43,20 @@ const DashboardLayout = () => {
                     </li>
                     <li className="text-2xl font-medium">
                       <NavLink
+                        to="/dashboard/add-announcement"
+                        className={({ isActive, isPending }) =>
+                          isPending
+                            ? "pending"
+                            : isActive
+                            ? "text-green-600 font-semibold "
+                            : ""
+                        }
+                      >
+                        Add Announcement
+                      </NavLink>
+                    </li>
+                    <li className="text-2xl font-medium">
+                      <NavLink
                         to="/dashboard/reported-comments"
                         className={({ isActive, isPending }) =>
                           isPending
@@ -52,7 +66,7 @@ const DashboardLayout = () => {
                             : ""
                         }
                       >
-                        Comments
+                        Comments Report
                       </NavLink>
                     </li>
                   </ul>
