@@ -2,10 +2,11 @@ import React from "react";
 import useAxiosPublic from "./../../../hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
 import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
+import Swal from "sweetalert2";
 
 const AllUsers = () => {
   const axiosPublic = useAxiosPublic();
-  const { data: usersInfo = [], isPending: isLoading } = useQuery({
+  const { data: usersInfo = [], isPending: isLoading, refetch } = useQuery({
     queryKey: ["all-users"],
     queryFn: async () => {
       const res = await axiosPublic.get("/users");
@@ -14,7 +15,24 @@ const AllUsers = () => {
   });
 
   const handleMakeAdmin = (user) => {
-    console.log(user);
+    const userInfoUpdate = {
+        status: "gold",
+        statusPhotoUrl: "https://i.postimg.cc/1RphNDvj/admin-crown.png",
+        role: "admin"
+    }
+    axiosPublic.put(`/users/admin/${user._id}`, userInfoUpdate)
+    .then( res => {
+        if(res.data.modifiedCount > 0){
+            refetch();
+            Swal.fire({
+                
+                icon: "success",
+                title: `${user?.name} is an admin now`,
+                showConfirmButton: false,
+                timer: 1500
+              });
+        }
+    })
   }
 
   return (
