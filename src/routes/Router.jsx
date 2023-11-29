@@ -16,6 +16,7 @@ import CommentsReport from "../pages/Dashboard/CommentsReport/CommentsReport";
 import AddAnnouncement from "../pages/Dashboard/AddAnnouncement/AddAnnouncement";
 import AdminRoute from "./AdminRoute";
 import PostDetails from "../pages/Home/PostDetails/PostDetails";
+import CommentDetails from "../pages/Dashboard/CommentDetails/CommentDetails";
 
 const router = createBrowserRouter([
   {
@@ -65,6 +66,10 @@ const router = createBrowserRouter([
       {
         path: "my-posts",
         element: <MyPosts />,
+      },
+      {
+        path: "comment-details/:id",
+        element: <CommentDetails />
       },
 
       // admin dashboard routes

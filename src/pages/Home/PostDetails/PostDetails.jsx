@@ -39,6 +39,7 @@ const PostDetails = () => {
         postID : post?._id,
         postAuthor: post?.authorName,
         commentUserName : name,
+        commentUserEmail: user?.email,
         commentUserImg: user?.photoURL,
         commentUserMsg: message,
 
