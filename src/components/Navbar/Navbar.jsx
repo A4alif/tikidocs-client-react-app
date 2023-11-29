@@ -2,12 +2,14 @@ import React, { useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
 import logo from "../../assets/tikidocsLogo.png";
 import { AuthContext } from "../../Provider/AuthProvider";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 import useIsAdmin from "../../hooks/useIsAdmin";
+import useAnnouncement from "../../hooks/useAnnouncement";
 
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
   const [isAdmin] = useIsAdmin();
+  const [announce, isLoading] = useAnnouncement();
   const handleLogOut = () => {
     logOut()
       .then(() => {
@@ -70,7 +72,12 @@ const Navbar = () => {
                   </NavLink>
                 </li>
                 <li>
-                  <Link>Notifications</Link>
+                  <Link>
+                    <span className="mr-2">Notifications</span>
+                    <div className="badge bg-purple-500 text-white">
+                      {announce?.length}
+                    </div>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -108,7 +115,12 @@ const Navbar = () => {
               >
                 Membership
               </NavLink>
-              <Link>Notifications</Link>
+              <Link>
+                <span className="mr-2">Notifications</span>
+                <div className="badge bg-purple-500 text-white">
+                  {announce?.length}
+                </div>
+              </Link>
             </ul>
           </div>
           <div className="navbar-end">
@@ -131,8 +143,12 @@ const Navbar = () => {
                       <a className="justify-between">{user?.displayName}</a>
                     </li>
                     <li>
-                      {user?.email && !isAdmin && <Link to={"/dashboard/user-profile"}>Dashboard</Link>}
-                      {user?.email && isAdmin && <Link to={"/dashboard/admin-profile"}>Dashboard</Link>}
+                      {user?.email && !isAdmin && (
+                        <Link to={"/dashboard/user-profile"}>Dashboard</Link>
+                      )}
+                      {user?.email && isAdmin && (
+                        <Link to={"/dashboard/admin-profile"}>Dashboard</Link>
+                      )}
                     </li>
                     <li className="pb-3 text-red-500 font-bold">
                       <Link to={""} onClick={handleLogOut}>

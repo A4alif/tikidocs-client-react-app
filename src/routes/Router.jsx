@@ -15,6 +15,7 @@ import AllUsers from "../pages/Dashboard/AllUsers/AllUsers";
 import CommentsReport from "../pages/Dashboard/CommentsReport/CommentsReport";
 import AddAnnouncement from "../pages/Dashboard/AddAnnouncement/AddAnnouncement";
 import AdminRoute from "./AdminRoute";
+import PostDetails from "../pages/Home/PostDetails/PostDetails";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "/post-details/:id",
+        element: <PostDetails />,
       },
       {
         path: "/membership",

@@ -1,17 +1,10 @@
 import React from "react";
-import useAxiosPublic from "../../../hooks/useAxiosPublic";
-import { useQuery } from "@tanstack/react-query";
 import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
+import useAnnouncement from "../../../hooks/useAnnouncement";
 
 const Announcements = () => {
-  const axiosPublic = useAxiosPublic();
-  const { data: announce = [], isPending: isLoading } = useQuery({
-    queryKey: ["announce"],
-    queryFn: async () => {
-      const res = await axiosPublic.get("/announcements");
-      return res.data.result;
-    },
-  });
+  const [announce, isLoading] = useAnnouncement();
+
   return (
     <>
       {announce.length == 0 ? (
@@ -51,9 +44,9 @@ const Announcements = () => {
                 <div className="overflow-x-auto">
                   <table className="table">
                     {/* head */}
-                    <thead>
+                    <thead className="bg-gray-300 text-lg">
                       <tr>
-                        <th>Author</th>
+                        <th>Admin</th>
                         <th>Announcement</th>
                         <th>Date</th>
                       </tr>

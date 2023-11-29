@@ -2,6 +2,7 @@ import React from "react";
 import useAxiosPublic from "./../../../hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
 import LoadingSpinner from "./../../../components/LoadingSpinner/LoadingSpinner";
+import { Link } from "react-router-dom";
 
 const Posts = () => {
   const axiosPublic = useAxiosPublic();
@@ -78,9 +79,9 @@ const Posts = () => {
                       </div>
                     </td>
                     <td>
-                      <p className="text-lg font-semibold text-gray-600 cursor-pointer">
+                      <Link to={`/post-details/${post?._id}`} ><p className="text-lg font-semibold text-gray-600 cursor-pointer hover:text-purple-700 ">
                         {post?.title}
-                      </p>
+                      </p></Link>
                     </td>
                     <td>
                       <p className="capitalize text-md text-purple-500 font-semibold">
