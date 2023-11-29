@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Helmet } from "react-helmet-async";
 import useMembership from "../../hooks/useMembership";
 import LoadingSpinner from "./../../components/LoadingSpinner/LoadingSpinner";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import Swal from "sweetalert2";
+import { AuthContext } from './../../Provider/AuthProvider';
 
 const Membership = () => {
   const [membershipDetails, isLoading] = useMembership();
   const axiosPublic = useAxiosPublic();
+  const {user} = useContext(AuthContext);
 
   // add membership to mycart collection
   const handleBuyNow = (itemInfo) => {
@@ -18,7 +20,8 @@ const Membership = () => {
       membershipName: membershipName.toLowerCase(),
       photourl,
       description,
-      price
+      price,
+      email: user?.email,
     }
     
     axiosPublic.post("/cart", packageInfo)

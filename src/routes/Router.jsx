@@ -17,6 +17,7 @@ import AddAnnouncement from "../pages/Dashboard/AddAnnouncement/AddAnnouncement"
 import AdminRoute from "./AdminRoute";
 import PostDetails from "../pages/Home/PostDetails/PostDetails";
 import CommentDetails from "../pages/Dashboard/CommentDetails/CommentDetails";
+import Cart from "../pages/Dashboard/Cart/Cart";
 
 const router = createBrowserRouter([
   {
@@ -66,6 +67,10 @@ const router = createBrowserRouter([
       {
         path: "my-posts",
         element: <MyPosts />,
+      },
+      {
+        path: "my-cart",
+        element: <Cart />
       },
       {
         path: "comment-details/:id",

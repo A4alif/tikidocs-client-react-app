@@ -141,6 +141,20 @@ const DashboardLayout = () => {
                         My Posts
                       </NavLink>
                     </li>
+                    <li className="text-2xl font-medium">
+                      <NavLink
+                        to="/dashboard/my-cart"
+                        className={({ isActive, isPending }) =>
+                          isPending
+                            ? "pending"
+                            : isActive
+                            ? "text-green-600 font-semibold "
+                            : ""
+                        }
+                      >
+                        Cart
+                      </NavLink>
+                    </li>
                   </ul>
                 </div>
                 <div className="divider divider-success pt-9">
