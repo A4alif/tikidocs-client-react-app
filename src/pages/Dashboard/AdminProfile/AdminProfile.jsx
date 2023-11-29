@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 const AdminProfile = () => {
   const [userInfo, isLoading] = useUserProfile();
   const axiosPublic = useAxiosPublic();
+  
   // add tags to database
   const handleSubmitTags = (e) => {
     e.preventDefault();
@@ -44,11 +45,14 @@ const AdminProfile = () => {
     const membershipName = form.name.value;
     const photourl = form.photourl.value;
     const description = form.description.value;
+    const price = form.price.value;
     const membershipInfo = {
       membershipName,
       photourl,
-      description
+      description,
+      price: Number(price)
     }
+    
    
     axiosPublic.post("/membership", membershipInfo)
     .then( res => {
@@ -121,6 +125,7 @@ const AdminProfile = () => {
           <div className="container mx-auto px-6">
             <div className="flex flex-col md:flex-row space-x-6 space-y-6 md:space-y-0">
               <div className=" w-full md:w-1/2 ">
+                {/* add tags */}
                 <form onSubmit={handleSubmitTags}>
                   <div className="card pt-6  bg-base-100 shadow-xl">
                     <div className="card-body">
@@ -138,6 +143,7 @@ const AdminProfile = () => {
                           name="name"
                           id="name"
                           placeholder="tag name"
+                          required
                         />
                         <div className="mt-9">
                           <button
@@ -152,8 +158,16 @@ const AdminProfile = () => {
                   </div>
                 </form>
               </div>
+              {/* pie chart */}
               <div className=" w-full lg:w-1/2 ">
-                <form onSubmit={handleSubmitMembership}>
+                <div>
+                  <h2>Pie Chart</h2>
+                </div>
+              </div>
+            </div>
+            {/* add membership */}
+            <div className="my-14 w-full md:w-5/6 lg:w-4/6 mx-auto px-6 md:px-0" >
+            <form onSubmit={handleSubmitMembership}>
                   <div className="card pt-6  bg-base-100 shadow-xl">
                     <div className="card-body">
                       <h2 className="card-title">Add Membership</h2>
@@ -171,6 +185,7 @@ const AdminProfile = () => {
                             name="name"
                             id="name"
                             placeholder="membership name"
+                            required
                           />
                         </div>
                         <div className="mb-6">
@@ -186,6 +201,23 @@ const AdminProfile = () => {
                             name="photourl"
                             id="photourl"
                             placeholder="photourl"
+                            required
+                          />
+                        </div>
+                        <div className="mb-6">
+                          <label
+                            className="block text-xl font-medium"
+                            htmlFor="price"
+                          >
+                            Price
+                          </label>
+                          <input
+                            className="bg-gray-200 w-3/4 px-4 py-3 rounded-lg mt-6 focus:outline-none"
+                            type="number"
+                            name="price"
+                            id="price"
+                            placeholder="price"
+                            required
                           />
                         </div>
                         <div className="mb-6">
@@ -195,6 +227,7 @@ const AdminProfile = () => {
                             id="description"
                             cols="10"
                             rows="4"
+                            required
                           ></textarea>
                         </div>
                         <div className="mt-9">
@@ -209,7 +242,6 @@ const AdminProfile = () => {
                     </div>
                   </div>
                 </form>
-              </div>
             </div>
           </div>
         </div>
