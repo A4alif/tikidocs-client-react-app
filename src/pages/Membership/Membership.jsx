@@ -2,12 +2,45 @@ import React from "react";
 import { Helmet } from "react-helmet-async";
 import useMembership from "../../hooks/useMembership";
 import LoadingSpinner from "./../../components/LoadingSpinner/LoadingSpinner";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
+import Swal from "sweetalert2";
 
 const Membership = () => {
   const [membershipDetails, isLoading] = useMembership();
+  const axiosPublic = useAxiosPublic();
 
-  const handleBuyNow = (packageInfo) => {
-    console.log(packageInfo);
+  // add membership to mycart collection
+  const handleBuyNow = (itemInfo) => {
+
+    const {membershipName, photourl, description, price} = itemInfo;
+
+    const packageInfo = {
+      membershipName: membershipName.toLowerCase(),
+      photourl,
+      description,
+      price
+    }
+    
+    axiosPublic.post("/cart", packageInfo)
+    .then( res => {
+      if (res.data.result.insertedId) {
+        Swal.fire({
+          icon: "success",
+          title: "Package added to cart successfully",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        form.reset();
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Something Went Wrong",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    })
+
   };
 
   return (
