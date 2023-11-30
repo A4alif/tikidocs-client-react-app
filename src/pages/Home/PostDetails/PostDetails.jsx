@@ -24,8 +24,15 @@ const PostDetails = () => {
   //   handle give vote
 
   const handleGiveVote = () => {
-    console.log("like unlike btn click");
-    setGiveVote(true);
+    const updatePostInfo = {
+      upVote: post?.upVote + 1,
+    };
+
+    axiosPublic.put(`/posts/${id}`, updatePostInfo).then((res) => {
+      if (res.data.result.modifiedCount > 0) {
+        setGiveVote(true);
+      }
+    });
   };
 
   // handle post comment
@@ -35,39 +42,35 @@ const PostDetails = () => {
     const name = form.name.value;
     const message = form.message.value;
     const commentInfo = {
-        postTitle : post?.title,
-        postID : post?._id,
-        postAuthor: post?.authorName,
-        commentUserName : name,
-        commentUserEmail: user?.email,
-        commentUserImg: user?.photoURL,
-        commentUserMsg: message,
+      postTitle: post?.title,
+      postID: post?._id,
+      postAuthor: post?.authorName,
+      commentUserName: name,
+      commentUserEmail: user?.email,
+      commentUserImg: user?.photoURL,
+      commentUserMsg: message,
+    };
 
-    }
-    
     // post comment to database
-    axiosPublic.post("/user-comment", commentInfo)
-    .then( res => {
-        if(res.data.result.insertedId){
-            Swal.fire({
-              icon: "success",
-              title: "Comment Added Successfully",
-              showConfirmButton: false,
-              timer: 1500
-            });
-            form.reset();
-          } else {
-            Swal.fire({
-              icon: "error",
-              title: "Something Went Wrong",
-              showConfirmButton: false,
-              timer: 1500
-            });
-          }
-    })
-    
+    axiosPublic.post("/user-comment", commentInfo).then((res) => {
+      if (res.data.result.insertedId) {
+        Swal.fire({
+          icon: "success",
+          title: "Comment Added Successfully",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        form.reset();
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Something Went Wrong",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    });
   };
-
 
   return (
     <>
