@@ -8,7 +8,7 @@ const AllUsers = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const axiosPublic = useAxiosPublic();
-  const limit = 5;
+  const limit = 10;
   const {
     data: usersInfo = [],
     isPending: isLoading,
@@ -88,6 +88,8 @@ const AllUsers = () => {
                     type="text"
                     name="search"
                     id="search"
+                    placeholder="search user name"
+                    required
                   />
                   <button type="submit" className="btn btn-primary">
                     Search
