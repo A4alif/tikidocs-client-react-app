@@ -3,11 +3,22 @@ import useUserProfile from "../../../hooks/useUserProfile";
 import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
 import Swal from "sweetalert2";
+import useAllComments from "../../../hooks/useAllComments";
+import useAllUsers from "../../../hooks/useAllUsers";
+import useAllPosts from "../../../hooks/useAllPosts";
+import { PieChart } from "react-minimal-pie-chart";
 
 const AdminProfile = () => {
   const [userInfo, isLoading] = useUserProfile();
   const axiosPublic = useAxiosPublic();
-  
+  const [posts] = useAllPosts();
+  const [comments] = useAllComments();
+  const [users] = useAllUsers();
+
+  let allPosts = posts?.length;
+  let allComments = comments?.length;
+  let allUsers = users?.length;
+
   // add tags to database
   const handleSubmitTags = (e) => {
     e.preventDefault();
@@ -50,12 +61,10 @@ const AdminProfile = () => {
       membershipName,
       photourl,
       description,
-      price: Number(price)
-    }
-    
-   
-    axiosPublic.post("/membership", membershipInfo)
-    .then( res => {
+      price: Number(price),
+    };
+
+    axiosPublic.post("/membership", membershipInfo).then((res) => {
       if (res.data.result.insertedId) {
         Swal.fire({
           icon: "success",
@@ -72,14 +81,17 @@ const AdminProfile = () => {
           timer: 1500,
         });
       }
-    })
-
-
+    });
   };
 
   // do other things
+  const data = [
+    { title: "Posts", value: allPosts, color: "#023e8a" },
+    { title: "Comments", value: allComments, color: "#562c2c" },
+    { title: "Users", value: allUsers, color: "#ff5a00" },
+  ];
 
-
+  const totalValue = data.reduce((acc, entry) => acc + entry.value, 0);
 
   return (
     <>
@@ -160,88 +172,103 @@ const AdminProfile = () => {
               </div>
               {/* pie chart */}
               <div className=" w-full lg:w-1/2 ">
-                <div>
-                  <h2>Pie Chart</h2>
+                <div className="px-9">
+                  <PieChart
+                    data={data}
+                    label={({ dataEntry }) => {
+                      const percentage = Math.round(
+                        (dataEntry.value / totalValue) * 100
+                      );
+                      return `${dataEntry.title}: ${percentage}%`;
+                    }}
+                    labelPosition={60}
+                    labelStyle={{
+                      fontSize: "5px",
+                      fontFamily: "sans-serif",
+                      fill: "#dee2e6",
+                    }}
+                  />
                 </div>
               </div>
             </div>
+
             {/* add membership */}
-            <div className="my-14 w-full md:w-5/6 lg:w-4/6 mx-auto px-6 md:px-0" >
-            <form onSubmit={handleSubmitMembership}>
-                  <div className="card pt-6  bg-base-100 shadow-xl">
-                    <div className="card-body">
-                      <h2 className="card-title">Add Membership</h2>
-                      <div className="my-6">
-                        <div className="mb-6">
-                          <label
-                            className="block text-xl font-medium"
-                            htmlFor="name"
-                          >
-                            Name
-                          </label>
-                          <input
-                            className="bg-gray-200 w-3/4 px-4 py-3 rounded-lg mt-6 focus:outline-none"
-                            type="text"
-                            name="name"
-                            id="name"
-                            placeholder="membership name"
-                            required
-                          />
-                        </div>
-                        <div className="mb-6">
-                          <label
-                            className="block text-xl font-medium"
-                            htmlFor="photourl"
-                          >
-                            Photo URL
-                          </label>
-                          <input
-                            className="bg-gray-200 w-3/4 px-4 py-3 rounded-lg mt-6 focus:outline-none"
-                            type="text"
-                            name="photourl"
-                            id="photourl"
-                            placeholder="photourl"
-                            required
-                          />
-                        </div>
-                        <div className="mb-6">
-                          <label
-                            className="block text-xl font-medium"
-                            htmlFor="price"
-                          >
-                            Price
-                          </label>
-                          <input
-                            className="bg-gray-200 w-3/4 px-4 py-3 rounded-lg mt-6 focus:outline-none"
-                            type="number"
-                            name="price"
-                            id="price"
-                            placeholder="price"
-                            required
-                          />
-                        </div>
-                        <div className="mb-6">
-                          <textarea
-                            className="bg-gray-200 w-3/4 px-4 py-3 rounded-lg mt-6 focus:outline-none"
-                            name="description"
-                            id="description"
-                            cols="10"
-                            rows="4"
-                            required
-                          ></textarea>
-                        </div>
-                        <div className="mt-9">
-                          <button
-                            type="submit"
-                            className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-md px-5 py-2.5 text-center me-2 mb-2"
-                          >
-                            Add Membership
-                          </button>
-                        </div>
+            <div className="my-14 w-full md:w-5/6 lg:w-4/6 mx-auto px-6 md:px-0">
+              <form onSubmit={handleSubmitMembership}>
+                <div className="card pt-6  bg-base-100 shadow-xl">
+                  <div className="card-body">
+                    <h2 className="card-title">Add Membership Package</h2>
+                    <div className="my-6">
+                      <div className="mb-6">
+                        <label
+                          className="block text-xl font-medium"
+                          htmlFor="name"
+                        >
+                          Name
+                        </label>
+                        <input
+                          className="bg-gray-200 w-3/4 px-4 py-3 rounded-lg mt-6 focus:outline-none"
+                          type="text"
+                          name="name"
+                          id="name"
+                          placeholder="membership name"
+                          required
+                        />
+                      </div>
+                      <div className="mb-6">
+                        <label
+                          className="block text-xl font-medium"
+                          htmlFor="photourl"
+                        >
+                          Photo URL
+                        </label>
+                        <input
+                          className="bg-gray-200 w-3/4 px-4 py-3 rounded-lg mt-6 focus:outline-none"
+                          type="text"
+                          name="photourl"
+                          id="photourl"
+                          placeholder="photourl"
+                          required
+                        />
+                      </div>
+                      <div className="mb-6">
+                        <label
+                          className="block text-xl font-medium"
+                          htmlFor="price"
+                        >
+                          Price
+                        </label>
+                        <input
+                          className="bg-gray-200 w-3/4 px-4 py-3 rounded-lg mt-6 focus:outline-none"
+                          type="number"
+                          name="price"
+                          id="price"
+                          placeholder="price"
+                          required
+                        />
+                      </div>
+                      <div className="mb-6">
+                        <textarea
+                          className="bg-gray-200 w-3/4 px-4 py-3 rounded-lg mt-6 focus:outline-none"
+                          name="description"
+                          id="description"
+                          cols="10"
+                          rows="4"
+                          required
+                        ></textarea>
+                      </div>
+                      <div className="mt-9">
+                        <button
+                          type="submit"
+                          className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-md px-5 py-2.5 text-center me-2 mb-2"
+                        >
+                          Add Membership
+                        </button>
                       </div>
                     </div>
                   </div>
-                </form>
+                </div>
+              </form>
             </div>
           </div>
         </div>
