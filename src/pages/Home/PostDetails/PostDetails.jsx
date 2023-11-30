@@ -7,6 +7,7 @@ import { BiSolidLike } from "react-icons/bi";
 import { AiFillDislike } from "react-icons/ai";
 import { AuthContext } from "../../../Provider/AuthProvider";
 import Swal from "sweetalert2";
+import {  FacebookShareButton, FacebookIcon} from 'react-share';
 
 const PostDetails = () => {
   const { user } = useContext(AuthContext);
@@ -137,6 +138,14 @@ const PostDetails = () => {
                         <button onClick={handleGiveVote}>
                           <AiFillDislike size={45} />
                         </button>
+                        <div className="flex items-center space-x-6" >
+                          <h2 className="text-sm text-gray-500" >Share  on social media</h2>
+                        
+                          <FacebookShareButton url={window.location.href}>
+                            <FacebookIcon size={45} round />
+                          </FacebookShareButton>
+                        
+                        </div>
                       </>
                     )}
                   </>

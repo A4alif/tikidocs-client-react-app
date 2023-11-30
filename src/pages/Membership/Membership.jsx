@@ -55,7 +55,7 @@ const Membership = () => {
         <div className="container mx-auto px-6 my-24">
           <div>
             <h2 className="text-center text-3xl md:text-4xl font-semibold single-text-gradient">
-              Buy Membership
+               Membership Package
             </h2>
           </div>
           {isLoading && (
@@ -99,7 +99,7 @@ const Membership = () => {
                         onClick={() => handleBuyNow(item)}
                         className="text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-md px-5 py-2.5 text-center me-2 mb-2"
                       >
-                        Buy Now
+                        Add to Cart
                       </button>
                     </div>
                   </div>

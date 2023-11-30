@@ -1,10 +1,16 @@
 import React, { useState } from "react";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
 import Swal from "sweetalert2";
+import { Modal } from "react-responsive-modal";
+import "react-responsive-modal/styles.css";
 
 const CommentDetailsRow = ({ comment }) => {
   const [feedback, setFeedback] = useState("");
   const axiosPublic = useAxiosPublic();
+  const [open, setOpen] = useState(false);
+
+  const onOpenModal = () => setOpen(true);
+  const onCloseModal = () => setOpen(false);
 
   const handleReportComment = (comment) => {
     const reportCommentInfo = {
@@ -63,7 +69,25 @@ const CommentDetailsRow = ({ comment }) => {
         <td className="w-3/6">
           <div className="w-3/4">
             <span className="text-sm leading-8 ">
-              {comment?.commentUserMsg}
+              {comment?.commentUserMsg.length > 20 ? (
+                <>
+                  {" "}
+                  <span>
+                    {comment?.commentUserMsg.slice(0, 20)}...{" "}
+                    <span
+                      onClick={onOpenModal}
+                      className="text-blue-500 font-bold cursor-pointer"
+                    >
+                      Read More
+                    </span>{" "}
+                  </span>{" "}
+                </>
+              ) : (
+                <>
+                  {" "}
+                  <span>{comment?.commentUserMsg}</span>{" "}
+                </>
+              )}
             </span>
           </div>
         </td>
@@ -102,6 +126,20 @@ const CommentDetailsRow = ({ comment }) => {
               </button>
             </>
           )}
+        </td>
+      </tr>
+      {/* modal show */}
+      <tr>
+        <td>
+          <div>
+            <Modal open={open} onClose={onCloseModal} center>
+              <div className="card w-[450px] bg-base-100 shadow-xl">
+                <div className="card-body">
+                  <p className="py-14">{comment?.commentUserMsg}</p>
+                </div>
+              </div>
+            </Modal>
+          </div>
         </td>
       </tr>
     </>

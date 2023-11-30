@@ -71,7 +71,7 @@ const Posts = () => {
                   <th>Author</th>
                   <th>Post Title</th>
                   <th>Tags</th>
-                  <th>Total Comments</th>
+                  
                   <th>Time</th>
                   <th>Total Votes</th>
                 </tr>
@@ -81,7 +81,7 @@ const Posts = () => {
                 {posts.result?.map((post) => (
                   <tr key={post._id}>
                     <td>
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-6">
                         <div className="avatar">
                           <div className="mask mask-squircle w-12 h-12">
                             <img
@@ -107,11 +107,7 @@ const Posts = () => {
                         {post?.postTags}
                       </p>
                     </td>
-                    <th>
-                      <button className="btn btn-ghost btn-xs">
-                        comments count
-                      </button>
-                    </th>
+                    
                     <td>
                       <p className="text-lg text-gray-400">{post?.postDate}</p>
                     </td>
