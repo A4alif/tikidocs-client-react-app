@@ -1,39 +1,58 @@
-import React from "react";
+import React, { useState } from "react";
 import useAxiosPublic from "./../../../hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
 import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
 import Swal from "sweetalert2";
 
 const AllUsers = () => {
+  const [page, setPage] = useState(1);
   const axiosPublic = useAxiosPublic();
-  const { data: usersInfo = [], isPending: isLoading, refetch } = useQuery({
-    queryKey: ["all-users"],
+  const limit = 10;
+  const {
+    data: usersInfo = [],
+    isPending: isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ["all-users", page],
     queryFn: async () => {
-      const res = await axiosPublic.get("/users");
-      return res.data.result;
+      const res = await axiosPublic.get(`/users?page=${page}&limit=${limit}`);
+      return res.data;
     },
   });
 
   const handleMakeAdmin = (user) => {
     const userInfoUpdate = {
-        status: "admin",
-        statusPhotoUrl: "https://i.postimg.cc/1RphNDvj/admin-crown.png",
-        role: "admin"
+      status: "admin",
+      statusPhotoUrl: "https://i.postimg.cc/1RphNDvj/admin-crown.png",
+      role: "admin",
+    };
+    axiosPublic.put(`/users/admin/${user._id}`, userInfoUpdate).then((res) => {
+      if (res.data.modifiedCount > 0) {
+        refetch();
+        Swal.fire({
+          icon: "success",
+          title: `${user?.name} is an admin now`,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    });
+  };
+
+  // pagination handle
+
+  const totalPage = Math.ceil(usersInfo.total / limit);
+  const handlePrevious = () => {
+    if (page > 1) {
+      setPage(page - 1);
     }
-    axiosPublic.put(`/users/admin/${user._id}`, userInfoUpdate)
-    .then( res => {
-        if(res.data.modifiedCount > 0){
-            refetch();
-            Swal.fire({
-                
-                icon: "success",
-                title: `${user?.name} is an admin now`,
-                showConfirmButton: false,
-                timer: 1500
-              });
-        }
-    })
-  }
+  };
+
+  const handleNext = () => {
+    if (page < totalPage) {
+      setPage(page + 1);
+    }
+  };
 
   return (
     <>
@@ -49,8 +68,8 @@ const AllUsers = () => {
           <>
             {" "}
             <div className="text-center">
-              <h2 className="text-3xl md:text-4xl single-text-gradient font-semibold">
-                Total User : {usersInfo.length}{" "}
+              <h2 className="text-3xl md:text-4xl single-text-gradient font-semibold mb-9">
+                All User List
               </h2>
             </div>
             {/* user table */}
@@ -68,7 +87,7 @@ const AllUsers = () => {
                   </thead>
                   <tbody>
                     {/* row 1 */}
-                    {usersInfo?.map((user, index) => (
+                    {usersInfo?.result?.map((user, index) => (
                       <tr key={user._id}>
                         <th>
                           <p className="ml-3">{index + 1}</p>
@@ -92,7 +111,10 @@ const AllUsers = () => {
                           </div>
                         </td>
                         <td>
-                          <button onClick={() => handleMakeAdmin(user)} className="text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-md px-5 py-2.5 text-center me-2 mb-2" >
+                          <button
+                            onClick={() => handleMakeAdmin(user)}
+                            className="text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-md px-5 py-2.5 text-center me-2 mb-2"
+                          >
                             Make Admin
                           </button>
                         </td>
@@ -110,6 +132,48 @@ const AllUsers = () => {
             </div>
           </>
         )}
+
+        {/* pagination */}
+        <div className="container mx-auto px-6 mt-14">
+          {isLoading ? (
+            <>
+              {" "}
+              <LoadingSpinner />{" "}
+            </>
+          ) : (
+            <>
+              <div className=" flex justify-end">
+                <div className="join">
+                  <button onClick={handlePrevious} className="join-item btn">
+                    «
+                  </button>
+                  {Array(totalPage)
+                    .fill(0)
+                    .map((item, index) => {
+                      const pageNumber = index + 1;
+                      return (
+                        <button
+                          key={pageNumber}
+                          onClick={() => setPage(pageNumber)}
+                          className={`${
+                            pageNumber === page
+                              ? "join-item btn btn-md btn-active"
+                              : "join-item btn btn-md"
+                          }`}
+                        >
+                          {pageNumber}
+                        </button>
+                      );
+                    })}
+
+                  <button onClick={handleNext} className="join-item btn">
+                    »
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </>
   );
