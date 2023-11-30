@@ -6,16 +6,19 @@ import Swal from "sweetalert2";
 
 const AllUsers = () => {
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
   const axiosPublic = useAxiosPublic();
-  const limit = 10;
+  const limit = 5;
   const {
     data: usersInfo = [],
     isPending: isLoading,
     refetch,
   } = useQuery({
-    queryKey: ["all-users", page],
+    queryKey: ["all-users", page, search],
     queryFn: async () => {
-      const res = await axiosPublic.get(`/users?page=${page}&limit=${limit}`);
+      const res = await axiosPublic.get(
+        `/users?page=${page}&limit=${limit}&search=${search}`
+      );
       return res.data;
     },
   });
@@ -54,6 +57,13 @@ const AllUsers = () => {
     }
   };
 
+  // search user handle
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const search = e.target.search.value;
+    setSearch(search);
+  };
+
   return (
     <>
       <div className="mt-9">
@@ -71,6 +81,19 @@ const AllUsers = () => {
               <h2 className="text-3xl md:text-4xl single-text-gradient font-semibold mb-9">
                 All User List
               </h2>
+              <form onSubmit={handleSearch} className="mb-9">
+                <div className=" w-full md:max-w-lg mx-auto flex items-center space-x-6">
+                  <input
+                    className="bg-base-300 w-full py-3 px-3 rounded-lg focus:outline-none"
+                    type="text"
+                    name="search"
+                    id="search"
+                  />
+                  <button type="submit" className="btn btn-primary">
+                    Search
+                  </button>
+                </div>
+              </form>
             </div>
             {/* user table */}
             <div>
